@@ -19,7 +19,7 @@ sotiny=/usr/local/bin/slacksexy-uninstall
 solong=/var/log/sexyslack.log
 tosexy=/etc/sexyslack
 sosexy=/tmp/sexyslack
-hot=/usr/src/Gnome/
+sohot=/usr/src/Gnome/
 
 if [  "$ACT" == "Quit" ]; then
    exit 1
@@ -33,11 +33,11 @@ if [[ "$(echo "$ACT")"  == "remove_sexyslack" ]]
  elif
   [[ "$(echo "$ACT")" == "remove_gnome_installation" ]]
  then
-   /sbin/removepkg "$hot"/*/*.t?z
+   /sbin/removepkg "$sohot"/*/*.t?z && rm -r "$sohot"
  elif
   [[ "$(echo "$ACT")" == "remove_all" ]]
   then
-    /sbin/removepkg "$hot"/*/*.t?z && rm -r "$solong" "$tosexy" "$sosexy"
+    /sbin/removepkg "$sohot"/*/*.t?z && rm -r "$solong" "$tosexy" "$sosexy" "$sohot"
  else
  zenity --warning --text="Something went wrong with you. Explain your self better next time." 
  exit 1
