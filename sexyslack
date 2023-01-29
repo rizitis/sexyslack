@@ -184,7 +184,7 @@ if [[ "$(echo "$ACT")"  == "Install_Gnome_first_time" ]]
 fi
 set +e
 # If you installed libvirt or avahi or something else that need to edit rc.local and rc.local.shutdown do it now...before reboot.
-# Since we Slackware is not Ubuntu or Fedora do it by your hands... We rape enough Slackware philosophy with all these zenity dialogs and click <OK>. 
+# Since Slackware is not Ubuntu or Fedora do it by your hands... We rape enough Slackware philosophy with all these zenity dialogs and click <OK>. 
 # To be honest, I hope your system break, its the best way to learn how to fix it ;)
 zenity --info --ellipsize --no-wrap --no-markup --text="If you installed Avahi or libvirt edit /etc/rc.d/ properly...before reboot."
 
