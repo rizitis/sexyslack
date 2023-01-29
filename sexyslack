@@ -32,6 +32,15 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 #
+if [ "$EUID" -ne 0 ];then
+    zenity --error \
+       --title "Error Message" \
+       --width 500 \
+       --height 100 \
+       --text "Permission denied. Please run SBKS as root user"
+    exit 1
+fi
+
 
 PWD=/usr/src/Gnome
 
