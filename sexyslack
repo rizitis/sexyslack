@@ -37,7 +37,7 @@ if [ "$EUID" -ne 0 ];then
        --title "Error Message" \
        --width 500 \
        --height 100 \
-       --text "Permission denied. Please run SBKS as root user"
+       --text "Permission denied. Please run sexyslack as root"
     exit 1
 fi
 
