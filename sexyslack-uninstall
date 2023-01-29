@@ -14,6 +14,8 @@ fi
 
 ACT=$(zenity --text "Select what sexyslack-uninstall will do?" --column="Action" --list "remove_sexyslack" "remove_gnome_installation" "remove_all" "Quit"); echo "$ACT"
 
+sobig=/usr/local/bin/slacksexy
+sotiny=/usr/local/bin/slacksexy-uninstall
 solong=/var/log/sexyslack.log
 tosexy=/etc/sexyslack
 sosexy=/tmp/sexyslack
@@ -27,7 +29,7 @@ set -e
 
 if [[ "$(echo "$ACT")"  == "remove_sexyslack" ]] 
  then
-    rm -r "$solong" "$tosexy" "$sosexy"
+    rm -r "$solong" "$tosexy" "$sosexy" "$sobig" "$sotiny"
  elif
   [[ "$(echo "$ACT")" == "remove_gnome_installation" ]]
  then
