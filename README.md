@@ -11,7 +11,7 @@ With sexyslack you can keep your gnome installation update, you can upgrade to o
 to be ignored in case you dont want them or you already had them installed from other source like SBo. 
 Also it edit /etc/slackpkg/blacklist with packages that needed to be there for every version of Gnome separate. 
 ### Note 
-sexyslack is only for Slackware-current use, if you try it in Slackware-stable you will breake your system 100%.
+sexyslack is only for Slackware-current use, if you try it in Slackware-stable you will break your system 100%.
 Gnome installation in Slackware-stable should be ONLY from SlackBuilds.org @BobFunk doing great job there and safe.  
 
 ### Installation
