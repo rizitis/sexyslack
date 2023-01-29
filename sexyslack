@@ -1,0 +1,197 @@
+#!/bin/bash
+
+
+# sexyslack is tool for Slackware-current ONLY (DONT TRY IT TO SLACKWARE STABLE SYSTEM WILL BRAKE) which use @reddog Gnome binaries repo <https://reddoglinux.ddns.net/linux/gnome/>.
+# It working "like" a package manager but its not a package manager, its just a colection of bash scripts using Slackware pkgtools and zenity dialogs.
+# For Slackware-stable Gnome installation, please use packages ONLY from SlackBuilds.org  
+# Anagnostakis Ioannis (rizitis) GR Crete 1/2023
+#
+#
+# Redistribution and use of this script, with or without modification, is
+# permitted provided that the following conditions are met:
+#
+# MIT License
+#
+# Copyright (c) 2023 Anagnostakis Ioannis
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+#
+
+PWD=/usr/src/Gnome
+
+# GitHub links for blacklist... since Slackware current changes day by day the safe choise is these files... 
+LINK="https://raw.githubusercontent.com/rizitis/sexyslack/main/blacklist.txt"
+LINK1="https://raw.githubusercontent.com/rizitis/sexyslack/main/BLACKLIST42"
+LINK2="https://raw.githubusercontent.com/rizitis/sexyslack/main/BLACKLIST43"
+# LINK3="https://raw.githubusercontent.com/rizitis/sexyslack/main/BLACKLIST44" # Its commended because repo is building 44.alpha now... 
+# Dont worry @reddog is fast, he almost builded 44.alpha right now, so Gnome 44 it will be public for Slackware before Fedora...
+# But after Gnome project make it... :D  ###
+
+# Gnome Version you want to download. examples 42,43,44
+GNOMVER1=$(zenity --entry \
+       --width 500 \
+       --title "Welcome to sexyslack" \
+       --text "Enter only the number of Gnome version you wise.Example: 43"); echo "$GNOMVER1"
+GNOMVER=gfs"$GNOMVER1"
+# host server url
+URL="rsync://reddoglinux.ddns.net/"
+# place to keep logs
+LOG="/var/log/sexyslack.log"
+ACT=$(zenity --text "Select what sexyslack will do?" --column="Action" --list "Install_Gnome_first_time" "Update_my_Gnome_installation" "Upgrade_to_other_Gnome_version" "Quit"); echo "$ACT"
+
+if [  "$ACT" == "Quit" ]; then
+   exit 1
+fi
+
+# create PWD and start job
+mkdir -p /usr/src/Gnome/"$GNOMVER1" &&  cd "$PWD" || exit
+
+# remove old blacklist for slackpkg and download new, if needed...
+if [ "$GNOMVER1" = 42 ] && [ "$ACT" =  "Install_Gnome_first_time" ]; then
+  rm BLACKLIST* && wget "$LINK1"
+elif 
+   [ "$GNOMVER1" = 43 ] && [ "$ACT" =  "Install_Gnome_first_time" ]; then
+  rm BLACKLIST* && wget "$LINK2"
+elif
+   [ "$GNOMVER1" = 44 ] && [ "$ACT" =  "Install_Gnome_first_time" ]; then
+  rm BLACKLIST* && wget "$LINK3"
+elif
+   [ "$GNOMVER1" = 42 ] && [ "$ACT" =  "Upgrade_to_other_Gnome_version" ]; then
+  rm BLACKLIST* && wget "$LINK1"
+elif 
+   [ "$GNOMVER1" = 43 ] && [ "$ACT" =  "Upgrade_to_other_Gnome_version" ]; then
+  rm BLACKLIST* && wget "$LINK2"
+elif
+   [ "$GNOMVER1" = 44 ] && [ "$ACT" =  "Upgrade_to_other_Gnome_version" ]; then
+  rm BLACKLIST* && wget "$LINK3"
+else
+ echo "$(date "+%d/%m/%Y-%T")No BLACKLIST* file downloaded. You asked for Update_my_Gnome_installation | Fast support: 'https://discord.gg/MTPQsJt5aC' "  >> $LOG 
+fi
+
+# create folder sexyslack to /etc for sexyslack blacklist.txt file. Thats only for gnome repo packages blacklist
+mkdir -p /etc/sexyslack/ || exit
+if [[ "$(echo "$ACT")"  == "Install_Gnome_first_time" ]] 
+ then
+    wget "$LINK" && mv  blacklist.txt /etc/sexyslack/blacklist.txt
+ elif
+  [[ "$(echo "$ACT")" == "Update_my_Gnome_installation" ]]
+ then
+   echo "$(date "+%d/%m/%Y-%T") Using current sexyslack blacklist.txt"  >> $LOG
+ elif
+  [[ "$(echo "$ACT")" == "Upgrade_to_other_Gnome_version" ]]
+  then
+   echo "$(date "+%d/%m/%Y-%T") using old sexyslack blacklist.txt"  >> $LOG
+ else
+ zenity --warning --text="sexyslack FAILED. Something went wrong with sexyslack blacklist... 'https://discord.gg/MTPQsJt5aC'" >> $LOG
+ exit 1
+fi
+
+cat /etc/sexyslack/blacklist.txt
+
+# From this dialog user input gnome packages to blacklist
+BLACK=$(zenity --entry \
+       --width 500 \
+       --height=450 \
+       --title "Blacklist Gnome files" \
+       --text "To ignore sexyslack packages you dont want from Gnome repo or you allready have them add names (space) followed by*.Example: libvirt* qemu* console* | Before that you check your terminal to see the current blacklist. | First 7 lines are default from sexyslack"); echo "$BLACK"
+
+# this file needed if gnome blacklist change to remove new blacklisted packages from local repo.
+echo "$BLACK" >> /etc/sexyslack/banned.txt || exit
+
+# This file needed for rsync to know what gnome packages are excluded from remote repo.
+echo "$BLACK" | xargs -n1 >> /etc/sexyslack/blacklist.txt || exit
+
+# remove spaces and empty lines from file. because every time user make an update even if he hit cancel to blacklist dialog an empty line insert to file 
+sed -i '/^$/d'  /etc/sexyslack/blacklist.txt
+
+# make a copy of Slackware BLACKLIST for slackpkg
+if [[ "$(echo "$ACT")" == "Install_Gnome_first_time" ]] 
+ then
+cat BLACKLIST* >> /etc/slackpkg/blacklist 
+ elif
+  [[ "$(echo "$ACT")" == "Upgrade_to_other_Gnome_version" ]]
+  then
+cat BLACKLIST* >> /etc/slackpkg/blacklist
+else
+ [[ "$(echo "$ACT")" == "Update_my_Gnome_installation" ]]
+ echo "$(date "+%d/%m/%Y-%T") Keep /etc/slackpkg/blacklist as is, just updating things" >> $LOG
+fi 
+
+
+# If above command fail there is no reason to proceed, somthing went wrong so IF ok then downloandig only .txz and .asc files from remote repo, exclude also files that user add to gnome blacklist.txt
+if [  ! $? -eq 0 ]; then
+ echo "$(date "+%d/%m/%Y-%T") Cant find BLACKLIST. Please make sure Gnome Version is valid and if exist in 'https://reddoglinux.ddns.net/linux/gnome/' Fast support: 'https://discord.gg/MTPQsJt5aC'" >> $LOG 
+ exit 1
+else
+rsync  -avP --delete-after  --exclude-from=/etc/sexyslack/blacklist.txt "$URL""$GNOMVER" ./"$GNOMVER1"
+fi
+
+# If you want to check sign packages... I really dont know if anyone do this now days...  BUT thats wrong to be honest...
+# the best way to make your Linux > Windows is install packages from everywere...
+cd "$GNOMVER1" || exit
+gpg --import GPG-KEY
+if zenity --question --title="GPG-KEYS?" --text="Do you want to check .asc of files?" --no-wrap
+    then
+     for i in *.asc ; do gpg --verify "$i" ; done
+     zenity --info --title="Success" --text="You can check in your terminal" --no-wrap
+    else
+   echo "$(date "+%d/%m/%Y-%T") No GPG check, proceed"  >> $LOG
+fi
+
+# remove any banned gnome packages if existed here from the past and place them to /tmp/sexyslack/banned/ so they will not be included in upgradepkg command.
+file=$(cat /etc/sexyslack/banned.txt)
+
+for line in $file
+do
+    echo -e "$line\n" | xargs mv -t /tmp/sexyslack/banned/ || false
+done
+
+# Now its the time
+set -e
+zenity --question --title="Last question" --text="Proceed?" --no-wrap --ok-label "Yes" --cancel-label "No"
+
+
+if [[ "$(echo "$ACT")"  == "Install_Gnome_first_time" ]] 
+ then
+    /sbin/upgradepkg --reinstall --install-new *.t?z  
+ elif
+  [[ "$(echo "$ACT")" == "Update_my_Gnome_installation" ]]
+ then
+   /sbin/upgradepkg --install-new  *.t?z    
+ elif
+  [[ "$(echo "$ACT")" == "Upgrade_to_other_Gnome_version" ]]
+  then
+   /sbin/upgradepkg --install-new --reinstall *.t?z 
+ else
+ exit 1 | zenity --warning --text="INSTALLATION FAILED. Something went wrong. DO NOT REBOOT AND run slackpkg update;slackpkg upgrade-all Fast support: 'https://discord.gg/MTPQsJt5aC'" >> $LOG
+ 
+fi
+set +e
+# If you installed libvirt or avahi or something else that need to edit rc.local and rc.local.shutdown do it now...before reboot.
+# Since we Slackware is not Ubuntu or Fedora do it by your hands... We rape enough Slackware philosophy with all these zenity dialogs and click <OK>. 
+# To be honest, I hope your system break, its the best way to learn how to fix it ;)
+zenity --info --ellipsize --no-wrap --no-markup --text="If you installed Avahi or libvirt edit /etc/rc.d/ properly...before reboot."
+
+# reboot if needed...in any case "Good luck" you gonna need it, LOL
+if zenity --question --title="Do you want to reboot pc?" --text="Reboot?" --no-wrap
+    then
+     /sbin/reboot
+   else
+   zenity --info --text="OK MATE, TAKE YOUR TIME." --width=500 
+fi
