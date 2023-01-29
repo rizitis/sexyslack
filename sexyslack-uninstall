@@ -1,0 +1,45 @@
+#!/bin/bash
+
+
+
+if [ "$EUID" -ne 0 ];then
+    zenity --error \
+       --title "Error Message" \
+       --width 500 \
+       --height 100 \
+       --text "Permission denied. Please run sexyslack-uninstall as root user"
+    exit 1
+fi
+
+
+ACT=$(zenity --text "Select what sexyslack-uninstall will do?" --column="Action" --list "remove_sexyslack" "remove_gnome_installation" "remove_all" "Quit"); echo "$ACT"
+
+solong=/var/log/sexyslack.log
+tosexy=/etc/sexyslack
+sosexy=/tmp/sexyslack
+hot=/usr/src/Gnome/
+
+if [  "$ACT" == "Quit" ]; then
+   exit 1
+fi
+
+set -e
+
+if [[ "$(echo "$ACT")"  == "remove_sexyslack" ]] 
+ then
+    rm -r "$solong" "$tosexy" "$sosexy"
+ elif
+  [[ "$(echo "$ACT")" == "remove_gnome_installation" ]]
+ then
+   /sbin/removepkg "$hot"/*/*.t?z
+ elif
+  [[ "$(echo "$ACT")" == "remove_all" ]]
+  then
+    /sbin/removepkg "$hot"/*/*.t?z && rm -r "$solong" "$tosexy" "$sosexy"
+ else
+ zenity --warning --text="Something went wrong with you. Explain your self better next time." 
+ exit 1
+fi
+
+
+
