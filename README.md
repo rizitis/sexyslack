@@ -57,3 +57,5 @@ First why not?
 Second: I hope some young people new to Linux, whose like Gnome but get bored with their windows-like distros to found an opportunity
 to install Slackware and Gnome. Thats the first step in their linux life to start learning linux... else just clicks on windows and auto-updates...
 But linux.
+
+And last, but most important, when you have a potato pc you cant build the universe... but you can install it.
