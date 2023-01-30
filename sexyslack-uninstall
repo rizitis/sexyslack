@@ -43,5 +43,5 @@ if [[ "$(echo "$ACT")"  == "remove_sexyslack" ]]
  exit 1
 fi
 
-
+slackpkg update;slackpkg install-new;slackpkg upgrade-all
 
