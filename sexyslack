@@ -165,6 +165,7 @@ if zenity --question --title="GPG-KEYS?" --text="Do you want to check .asc of fi
 fi
 
 # remove any banned gnome packages if existed here from the past and place them to /tmp/sexyslack/banned/ so they will not be included in upgradepkg command.
+mkdir -p /tmp/sexyslack/banned/
 file=$(cat /etc/sexyslack/banned.txt)
 
 for line in $file
