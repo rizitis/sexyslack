@@ -12,7 +12,7 @@ if [ "$EUID" -ne 0 ];then
 fi
 
 PWD=$(pwd)
-TMP=$(/tmp)
+
 set -e
 
 # These files MUST be placed always upstream to be always updated, thats sexyslack job when it running not now.
