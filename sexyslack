@@ -121,6 +121,7 @@ BLACK=$(zenity --entry \
        --text "To ignore sexyslack packages you dont want from Gnome repo or you allready have them add names (space) followed by*.Example: libvirt* qemu* console* | Before that you check your terminal to see the current blacklist. | First 7 lines are default from sexyslack"); echo "$BLACK"
 
 # this file needed if gnome blacklist change to remove new blacklisted packages from local repo.
+touch /etc/sexyslack/banned.txt
 echo "$BLACK" >> /etc/sexyslack/banned.txt || exit
 
 # This file needed for rsync to know what gnome packages are excluded from remote repo.
