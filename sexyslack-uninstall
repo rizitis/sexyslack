@@ -14,8 +14,8 @@ fi
 
 ACT=$(zenity --text "Select what sexyslack-uninstall will do?" --column="Action" --list "remove_sexyslack" "remove_gnome_installation" "remove_all" "Quit"); echo "$ACT"
 
-sobig=/usr/local/bin/slacksexy
-sotiny=/usr/local/bin/slacksexy-uninstall
+sobig=/usr/local/bin/sexyslack
+sotiny=/usr/local/bin/sexyslack-uninstall
 solong=/var/log/sexyslack.log
 tosexy=/etc/sexyslack
 sosexy=/tmp/sexyslack
