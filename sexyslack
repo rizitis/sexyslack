@@ -69,7 +69,7 @@ if [  "$ACT" == "Quit" ]; then
 fi
 
 # create PWD and start job
-mkdir -p /usr/src/sexyslack/Gnome/"$GNOMVER1" &&  cd "$PWD" || exit
+mkdir -p "$PWD"/"$GNOMVER1" &&  cd "$PWD" || exit
 
 # remove old blacklist for slackpkg and download new, if needed...
 if [ "$GNOMVER1" = 42 ] && [ "$ACT" =  "Install_Gnome_first_time" ]; then
