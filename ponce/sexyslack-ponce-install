@@ -1,0 +1,64 @@
+#!/bin/bash
+
+
+if [ "$EUID" -ne 0 ];then
+    zenity --error \
+       --title "Error Message" \
+       --width 500 \
+       --height 100 \
+       --text "Permission denied. Please run sexyslack-ponce as root"
+    exit 1
+fi
+
+LOCALDIR="/usr/src/sexyslack/ponce"
+PKGDIR="packages"
+# place to keep logs
+LOG="/var/log/sexyslack-ponce-install.log"
+ACT=$(zenity --text "Select action" --column="Action" --list "Install_package" "Upgrade_package" "Reinstall_package" "Quit"); echo "$ACT"
+
+if [  "$ACT" == "Quit" ]; then
+   exit 1
+fi
+
+PKG=$(zenity --entry \
+       --width 300 \
+       --title "ADD PACKAGE NAME" \
+       --text "ADD HERE PACKAGE NAME"); echo "$PKG"
+       
+packages_dir=/var/log/packages/
+if [ "$packages_dir" = "/var/log/packages/" ]; then
+        ls "$packages_dir" | grep "$PKG"
+else
+    	echo "looks like $PKG its not in installation"
+fi
+
+zenity --info --ellipsize --no-wrap --no-markup --text="Just in case, check your terminal, shows if package is allready installed and the version"
+clear
+
+ls /usr/src/sexyslack/ponce/packages/ |grep "$PKG"
+
+
+zenity --info --ellipsize --no-wrap --no-markup --text="Terminal now shows packages in ponce repo.If package is there copy ALL 'packagename.txz' and paste in next step"
+PKG1=$(zenity --entry \
+       --width 300 \
+       --title "PASTE PACKAGE NAME" \
+       --text "PASTE HERE PACKAGE NAME"); echo "$PKG1"
+       
+zenity --question --title="Last question" --text="Proceed?" --no-wrap --ok-label "Yes" --cancel-label "No"
+
+if [[ "$(echo "$ACT")"  == "Install_package" ]] 
+ then
+    upgradepkg --install-new "$LOCALDIR"/"$PKGDIR"/"$PKG1"
+ elif
+  [[ "$(echo "$ACT")" == "Upgrade_package" ]]
+ then
+   upgradepkg  "$LOCALDIR"/"$PKGDIR"/"$PKG1"
+ elif
+  [[ "$(echo "$ACT")" == "Reinstall_package" ]]
+  then
+   upgradepkg --reinstall "$LOCALDIR"/"$PKGDIR"/"$PKG1"
+ else
+ zenity --warning --text="sexyslack-ponce FAILED.No package installed/upgraded/reinstall" >> $LOG
+ exit 1
+fi
+

@@ -1,0 +1,42 @@
+README means READIT
+
+# sexyslack-ponce-*
+Ok, lets make it clear.
+This folder (ponce) is almost hidden and not mentioned in sexyslack README.
+Slackware dont support binary installation exept from officiall .*t?z builded from PAT.
+Thats why even Slackbuilds.org dont have binary repo.
+Here you can have a local repo of binnaries from ponce repo which are builded from ponce also.
+The reasons to do this is IF you have a potato pc && IF you working offline && IF you are running Slackware-current.
+If all these "IF" met, then OK sexyslack-ponce-update and sexyslack-ponce-install is for you and you can take the risk...
+
+### Installation
+
+This time you need more that 2.5G free space in /usr/src/sexyslack/ and all ponce`s *.txz will be there for you. (Gnome is only 255MB)
+Then you must chmod +x sexyslack-ponce-update sexyslack-ponce-install
+And put them to /usr/local/bin/ 
+
+### Uninstall
+
+rm -r  /usr/src/sexyslack/ponce
+rm /usr/local/bin/sexyslack-ponce-update /usr/local/bin/sexyslack-ponce-install
+
+
+### HOWTO
+
+After installation first run as root
+ sexyslack-ponce-update 
+It will take some time but after it finish you will have more that 500 packages for installation if needed.
+After  sexyslack-ponce-update finish it will ask you if you want to install/upgrade/reinstall to use: 
+ sexyslack-ponce-install
+ Then you can answer questions for the rest of the job.
+ Since ponce repo is not rsync sexyslack-ponce-update use lftp command and every time you run it redownload all ponce repo.
+ So every week run sexyslack-ponce-update to have your repo up to day. 
+ AND every day you need a package run  sexyslack-ponce-install 
+ 
+ ### NOTE 
+1) Installing packages this way you may lose their run-time deps... So if you DONT know if deps are needed at the end a BIG zero (0) will be the resault...
+2) To save space and time ONLY *.txz are downloaded from ponce repo. Not even .asc files like Gnome repo
+ So you CAN NOT verify package KEYS... If for any logical reason you dont like that (thats the right way) then DONT use it.
+ Alternative go to https://ponce.cc/slackware/slackware64-current/packages/ and do the job. Thats why this site is there. 
+3) I am a farmer, I work in land and I love Jesus, my children, nature and Slackware. Thats why even my free time I want to be with my laptop but outside...
+ Land or sea dont have internet connection most of the times, so sexyslack-ponce* fo me is good until Elon Musk connect trees with then Moon, but for you what is good...only you know :)  

@@ -1,0 +1,107 @@
+#!/bin/bash
+
+
+# sexyslack-ponce-* scripts for ponce binaries repo. Slackware-current use ONLY.
+# Anagnostakis Ioannis (rizitis) GR Crete 1/2023
+#
+# These scripts will help you to keep always update your local ponce binary repo.
+# Note script DELETE old file or removed files that you have in your local repo BUT not exist on ponce repo.
+# If you dont want that remoce the "--delete-first" option from script.
+#
+# Redistribution and use of this script, with or without modification, is
+# permitted provided that the following conditions are met:
+#
+# MIT License
+#
+# Copyright (c) 2023 Anagnostakis Ioannis
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+#
+
+if [ "$EUID" -ne 0 ];then
+    zenity --error \
+       --title "Error Message" \
+       --width 500 \
+       --height 100 \
+       --text "Permission denied. Please run sexyslack-ponce as root"
+    exit 1
+fi
+
+
+# host server url and dir
+URL="https://ponce.cc/slackware/slackware64-current/"
+REMOTEDIR="packages/"
+
+# Your local path files will be copied. ADD your path
+LOCALDIR="/use/src/sexyslack/ponce"
+PKGDIR="packages"
+# place to keep logs
+LOG="/var/log/sexyslack-ponce.log"
+
+mkdir -p "$LOCALDIR"/"$PKGDIR" 
+cd "$LOCALDIR" 
+
+if [  ! $? -eq 0 ]; then
+ echo "$(date "+%d/%m/%Y-%T") Cant cd to $LOCALDIR. Please make sure this local directory is valid" >> $LOG 
+ exit 1
+fi
+
+if [ ! $? -eq 0 ]; then
+    echo "$(date "+%d/%m/%Y-%T") Cant download files. Make sure the credentials and server information are correct" >> $LOG
+else
+lftp  $URL << EOF
+  set mirror:use-pget-n 5
+mirror -c -P5 --delete-first --exclude-glob *.meta --exclude-glob *.lst --exclude-glob *.asc --exclude-glob *.md5 --exclude-glob *.bz2 --exclude-glob *.txt --exclude-glob *.gz  "$REMOTEDIR" "$PKGDIR"
+  quit
+EOF
+fi
+
+
+zenity --info --ellipsize --no-wrap --no-markup --text="SUCCESS. To install/upgrade packages run: sexyslack-ponce-install"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
