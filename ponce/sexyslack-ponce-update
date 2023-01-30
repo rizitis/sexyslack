@@ -49,7 +49,7 @@ URL="https://ponce.cc/slackware/slackware64-current/"
 REMOTEDIR="packages/"
 
 # Your local path files will be copied. ADD your path
-LOCALDIR="/use/src/sexyslack/ponce"
+LOCALDIR="/usr/src/sexyslack/ponce"
 PKGDIR="packages"
 # place to keep logs
 LOG="/var/log/sexyslack-ponce.log"
