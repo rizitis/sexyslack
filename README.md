@@ -63,4 +63,5 @@ And last, but most important, when you have a potato pc you cant build the unive
 
 
 Slackware™ is a trademark of Patrick Volkerding. http://www.slackware.com/trademark/trademark.php
+
 GNOME™ is trademark of the GNOME Foundation. https://foundation.gnome.org/logo-and-trademarks
