@@ -24,7 +24,3 @@ cp blacklist.txt /etc/sexyslack/
 
 chmod +x sexyslack && cp sexyslack /usr/local/bin/
 chmod +x sexyslack-uninstall && cp sexyslack-uninstall /usr/local/bin/
-
-
-
-
