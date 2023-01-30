@@ -17,7 +17,7 @@ Gnome installation in Slackware-stable should be ONLY from SlackBuilds.org @BobF
 ### Installation
 ```
 wget https://github.com/rizitis/sexyslack/archive/refs/heads/main.zip
-unzip sexyslack-main.zip && cd sexyslack-main
+unzip main.zip && cd sexyslack-main
 chmod +x install.sh
 ./install.sh
 ```
