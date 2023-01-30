@@ -175,7 +175,7 @@ done
 
 # Now its the time
 set -e
-zenity --question --title="Last question" --text="Proceed?" --no-wrap --ok-label "Yes" --cancel-label "No"
+zenity --question --title="INSTALLATION" --text="Proceed to installation?" --no-wrap --ok-label "Yes" --cancel-label "No"
 
 
 if [[ "$(echo "$ACT")"  == "Install_Gnome_first_time" ]] 
