@@ -19,7 +19,7 @@ sotiny=/usr/local/bin/slacksexy-uninstall
 solong=/var/log/sexyslack.log
 tosexy=/etc/sexyslack
 sosexy=/tmp/sexyslack
-sohot=/usr/src/Gnome/
+sohot=/usr/src/sexyslack/Gnome/
 
 if [  "$ACT" == "Quit" ]; then
    exit 1
