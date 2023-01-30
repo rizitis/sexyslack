@@ -115,11 +115,10 @@ cat /etc/sexyslack/blacklist.txt
 
 # From this dialog user input gnome packages to blacklist
 BLACK=$(zenity --entry \
-       --width 500 \
-       --height=450 \
-       --title "Blacklist Gnome files" \
-       --text "To ignore sexyslack packages you dont want from Gnome repo or you allready have them add names (space) followed by*.Example: libvirt* qemu* console* | Before that you check your terminal to see the current blacklist. | First 7 lines are default from sexyslack"); echo "$BLACK"
-
+       --width 200 \
+       --height=150 \
+       --title "Packages which you DONT want from remote repo to install" \
+       --text "Write names followed by(*) and <space> or hit <cancel>. example: qemu*  libvirt*  totem* "); echo "$BLACK"
 # this file needed if gnome blacklist change to remove new blacklisted packages from local repo.
 touch /etc/sexyslack/banned.txt
 echo "$BLACK" >> /etc/sexyslack/banned.txt || exit
