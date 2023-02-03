@@ -27,6 +27,8 @@ As root command in terminal
 ```
 sexyslack
 ```
+![sexyslack](https://github.com/rizitis/sexyslack/raw/main/sexyslack.png)
+
 And answer questions:
 What Version of Gnome you want?
 If you are trying new installation? or updating an existing Gnome installation or if you want to upgrade to other version?
