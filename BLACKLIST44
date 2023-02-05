@@ -1,6 +1,7 @@
-bash-completion
+glib-networking
+glib2
+gobject-introspection
+gtk4
 upower
-cairo
 gjs
-gnome-keyring
 libsoup3
