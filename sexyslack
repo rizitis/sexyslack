@@ -141,8 +141,13 @@ else
  [[ "$(echo "$ACT")" == "Update_my_Gnome_installation" ]]
  echo "$(date "+%d/%m/%Y-%T") Keep /etc/slackpkg/blacklist as is, just updating things" >> $LOG
 fi 
-
-
+# user check ChangeLog file if has updates
+if  [[ "$(echo "$ACT")" == "Update_my_Gnome_installation" ]]; then
+mv ChangeLog.txt OLD-ChangeLog.txt
+wget "$CHNGL"
+diff ChangeLog.txt OLD-ChangeLog.txt 
+zenity --question --title="ChangeLog" --text="Check ChangeLog in your terminal. Proceed?" --no-wrap --ok-lab>
+fi
 # If above command fail there is no reason to proceed, somthing went wrong so IF ok then downloandig only .txz and .asc files from remote repo, exclude also files that user add to gnome blacklist.txt
 if [  ! $? -eq 0 ]; then
  echo "$(date "+%d/%m/%Y-%T") Cant find BLACKLIST. Please make sure Gnome Version is valid and if exist in 'https://reddoglinux.ddns.net/linux/gnome/' Fast support: 'https://discord.gg/MTPQsJt5aC'" >> $LOG 
