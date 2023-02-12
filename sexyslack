@@ -56,7 +56,7 @@ LINK3="https://raw.githubusercontent.com/rizitis/sexyslack/main/BLACKLIST44" # N
 GNOMVER1=$(zenity --entry \
        --width 500 \
        --title "Welcome to sexyslack" \
-       --text "Enter only the number of Gnome version you wish.Example: 43"); echo "$GNOMVER1"
+       --text "Enter only the number of the Gnome version you would like.Example: 43"); echo "$GNOMVER1"
 GNOMVER=gfs"$GNOMVER1"
 # host server url
 URL="rsync://reddoglinux.ddns.net/"
