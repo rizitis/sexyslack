@@ -48,7 +48,7 @@ PWD=/usr/src/sexyslack/Gnome
 LINK="https://raw.githubusercontent.com/rizitis/sexyslack/main/blacklist.txt"
 LINK1="https://raw.githubusercontent.com/rizitis/sexyslack/main/BLACKLIST42"
 LINK2="https://raw.githubusercontent.com/rizitis/sexyslack/main/BLACKLIST43"
-LINK3="https://raw.githubusercontent.com/rizitis/sexyslack/main/BLACKLIST44" # Its commended because repo is building 44.alpha now... 
+LINK3="https://raw.githubusercontent.com/rizitis/sexyslack/main/BLACKLIST44" # NOT suggested... repo is building 44.alpha now... 
 # Dont worry @reddog @jloc0 @snuk @bobfunk and the other guys <https://discord.gg/MTPQsJt5aC> are fast, they almost builded 44.alpha right now, so Gnome 44 it will be public for Slackware before Fedora...
 # But after Gnome project make it... :D  ###
 
@@ -56,13 +56,12 @@ LINK3="https://raw.githubusercontent.com/rizitis/sexyslack/main/BLACKLIST44" # I
 GNOMVER1=$(zenity --entry \
        --width 500 \
        --title "Welcome to sexyslack" \
-       --text "Enter only the number of Gnome version you wise.Example: 43"); echo "$GNOMVER1"
+       --text "Enter only the number of Gnome version you wish.Example: 43"); echo "$GNOMVER1"
 GNOMVER=gfs"$GNOMVER1"
 # host server url
 URL="rsync://reddoglinux.ddns.net/"
 # place to keep logs
 LOG="/var/log/sexyslack.log"
-CHNGL=https://reddoglinux.ddns.net/linux/gnome/"$GNOMVER1".x/x86_64/ChangeLog.txt
 ACT=$(zenity --text "Select what sexyslack will do?" --column="Action" --list "Install_Gnome_first_time" "Update_my_Gnome_installation" "Upgrade_to_other_Gnome_version" "Quit"); echo "$ACT"
 
 if [  "$ACT" == "Quit" ]; then
@@ -90,14 +89,8 @@ elif
 elif
    [ "$GNOMVER1" = 44 ] && [ "$ACT" =  "Upgrade_to_other_Gnome_version" ]; then
   rm BLACKLIST* && wget "$LINK3"
-elif
-   [ "$GNOMVER1" = 44 ] && [ "$ACT" =  "Update_my_Gnome_installation" ]; then
-  rm BLACKLIST* && wget "$LINK3"
-elif 
-   [ "$GNOMVER1" = 43 ] && [ "$ACT" =  "Update_my_Gnome_installation" ]; then
-  rm BLACKLIST* && wget "$LINK2"
 else
- echo "$(date "+%d/%m/%Y-%T")No BLACKLIST* file downloaded. You asked for Update_my_Gnome_installation version 42 | Fast support: 'https://discord.gg/MTPQsJt5aC' "  >> $LOG 
+ echo "$(date "+%d/%m/%Y-%T")No BLACKLIST* file downloaded. You asked for Update_my_Gnome_installation | Fast support: 'https://discord.gg/MTPQsJt5aC' "  >> $LOG 
 fi
 
 # create folder sexyslack to /etc for sexyslack blacklist.txt file. Thats only for gnome repo packages blacklist
@@ -146,18 +139,20 @@ cat BLACKLIST* >> /etc/slackpkg/blacklist
 cat BLACKLIST* >> /etc/slackpkg/blacklist
 else
  [[ "$(echo "$ACT")" == "Update_my_Gnome_installation" ]]
-cat BLACKLIST* >> /etc/slackpkg/blacklist
+ echo "$(date "+%d/%m/%Y-%T") Keep /etc/slackpkg/blacklist as is, just updating things" >> $LOG
 fi 
 # remove doble entries from /etc/slackpkg/blacklist file
 sort /etc/slackpkg/blacklist | uniq > /tmp/blacklist
 mv /tmp/blacklist /etc/slackpkg/blacklist
+# setup download link for ChangeLog.txt
+CHNGL="https://reddoglinux.ddns.net/linux/gnome/"$GNOMVER1".x/x86_64/ChangeLog.txt"
+#wget "$CHNGL"
 # user check ChangeLog file if has updates
-if  [[ "$(echo "$ACT")" == "Update_my_Gnome_installation" ]]; then
 mv ChangeLog.txt OLD-ChangeLog.txt
 wget "$CHNGL"
 diff ChangeLog.txt OLD-ChangeLog.txt 
-zenity --question --title="ChangeLog" --text="Check ChangeLog in your terminal. Proceed?" --no-wrap --ok-label "Yes" --cancel-label "No"
-fi
+zenity --question \
+--text="Check ChangeLog diff in terminal.Are you sure you wish to proceed?"
 # If above command fail there is no reason to proceed, somthing went wrong so IF ok then downloandig only .txz and .asc files from remote repo, exclude also files that user add to gnome blacklist.txt
 if [  ! $? -eq 0 ]; then
  echo "$(date "+%d/%m/%Y-%T") Cant find BLACKLIST. Please make sure Gnome Version is valid and if exist in 'https://reddoglinux.ddns.net/linux/gnome/' Fast support: 'https://discord.gg/MTPQsJt5aC'" >> $LOG 
@@ -165,7 +160,6 @@ if [  ! $? -eq 0 ]; then
 else
 rsync  -avP --delete-after  --exclude-from=/etc/sexyslack/blacklist.txt "$URL""$GNOMVER" ./"$GNOMVER1"
 fi
-
 
 # If you want to check sign packages... I really dont know if anyone do this now days...  BUT thats wrong to be honest...
 # the best way to make your Linux > Windows is install packages from everywere...
