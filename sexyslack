@@ -145,7 +145,7 @@ fi
 sort /etc/slackpkg/blacklist | uniq > /tmp/blacklist
 mv /tmp/blacklist /etc/slackpkg/blacklist
 # setup download link for ChangeLog.txt
-CHNGL="https://reddoglinux.ddns.net/linux/gnome/"$GNOMVER1".x/x86_64/ChangeLog.txt"
+CHNGL=https://reddoglinux.ddns.net/linux/gnome/"$GNOMVER1".x/x86_64/ChangeLog.txt
 #wget "$CHNGL"
 # user check ChangeLog file if has updates
 mv ChangeLog.txt OLD-ChangeLog.txt
