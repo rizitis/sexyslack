@@ -90,8 +90,14 @@ elif
 elif
    [ "$GNOMVER1" = 44 ] && [ "$ACT" =  "Upgrade_to_other_Gnome_version" ]; then
   rm BLACKLIST* && wget "$LINK3"
+elif
+   [ "$GNOMVER1" = 44 ] && [ "$ACT" =  "Update_my_Gnome_installation" ]; then
+  rm BLACKLIST* && wget "$LINK3"
+elif 
+   [ "$GNOMVER1" = 43 ] && [ "$ACT" =  "Update_my_Gnome_installation" ]; then
+  rm BLACKLIST* && wget "$LINK2"
 else
- echo "$(date "+%d/%m/%Y-%T")No BLACKLIST* file downloaded. You asked for Update_my_Gnome_installation | Fast support: 'https://discord.gg/MTPQsJt5aC' "  >> $LOG 
+ echo "$(date "+%d/%m/%Y-%T")No BLACKLIST* file downloaded. You asked for Update_my_Gnome_installation version 42 | Fast support: 'https://discord.gg/MTPQsJt5aC' "  >> $LOG 
 fi
 
 # create folder sexyslack to /etc for sexyslack blacklist.txt file. Thats only for gnome repo packages blacklist
@@ -140,7 +146,7 @@ cat BLACKLIST* >> /etc/slackpkg/blacklist
 cat BLACKLIST* >> /etc/slackpkg/blacklist
 else
  [[ "$(echo "$ACT")" == "Update_my_Gnome_installation" ]]
- echo "$(date "+%d/%m/%Y-%T") Keep /etc/slackpkg/blacklist as is, just updating things" >> $LOG
+cat BLACKLIST* >> /etc/slackpkg/blacklist
 fi 
 
 # user check ChangeLog file if has updates
