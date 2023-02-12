@@ -148,7 +148,9 @@ else
  [[ "$(echo "$ACT")" == "Update_my_Gnome_installation" ]]
 cat BLACKLIST* >> /etc/slackpkg/blacklist
 fi 
-
+# remove doble entries from /etc/slackpkg/blacklist file
+sort /etc/slackpkg/blacklist | uniq > /tmp/blacklist
+mv /tmp/blacklist /etc/slackpkg/blacklist
 # user check ChangeLog file if has updates
 if  [[ "$(echo "$ACT")" == "Update_my_Gnome_installation" ]]; then
 mv ChangeLog.txt OLD-ChangeLog.txt
