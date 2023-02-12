@@ -141,7 +141,7 @@ else
  [[ "$(echo "$ACT")" == "Update_my_Gnome_installation" ]]
  echo "$(date "+%d/%m/%Y-%T") Keep /etc/slackpkg/blacklist as is, just updating things" >> $LOG
 fi 
-# remove doble entries from /etc/slackpkg/blacklist file
+# remove double entries from /etc/slackpkg/blacklist file
 sort /etc/slackpkg/blacklist | uniq > /tmp/blacklist
 mv /tmp/blacklist /etc/slackpkg/blacklist
 # setup download link for ChangeLog.txt
