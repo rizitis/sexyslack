@@ -27,7 +27,7 @@ As root command in terminal
 ```
 sexyslack
 ```
-![sexyslack](https://github.com/rizitis/sexyslack/raw/main/sexyslack.png)
+![sexyslack](https://github.com/rizitis/sexyslack/blob/main/Screenshot%20from%202023-02-13%2021-41-06.png)
 
 And answer questions:
 What Version of Gnome you want?
