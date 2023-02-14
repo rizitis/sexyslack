@@ -158,9 +158,9 @@ if [  ! $? -eq 0 ]; then
  echo "$(date "+%d/%m/%Y-%T") Cant find BLACKLIST. Please make sure Gnome Version is valid and if exist in 'https://reddoglinux.ddns.net/linux/gnome/' Fast support: 'https://discord.gg/MTPQsJt5aC'" >> $LOG 
  exit 1
 else
-rsync  -avP  --exclude-from=/etc/sexyslack/blacklist.txt "$URL""$GNOMVER" ./"$GNOMVER1"
+rsync  -avP --delete-after --exclude-from=/etc/sexyslack/blacklist.txt "$URL""$GNOMVER" ./"$GNOMVER1"
 fi
-#--delete-after
+#
 # If you want to check sign packages... I really dont know if anyone do this now days...  BUT thats wrong to be honest...
 # the best way to make your Linux > Windows is install packages from everywere...
 cd "$GNOMVER1" || exit
