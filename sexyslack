@@ -95,15 +95,15 @@ fi
 
 # create folder sexyslack to /etc for sexyslack blacklist.txt file. Thats only for gnome repo packages blacklist
 mkdir -p /etc/sexyslack/ || exit
-if [[ "$(echo "$ACT")"  == "Install_Gnome_first_time" ]] 
+if [[ "$ACT"  == "Install_Gnome_first_time" ]] 
  then
     wget "$LINK" && mv  blacklist.txt /etc/sexyslack/blacklist.txt
  elif
-  [[ "$(echo "$ACT")" == "Update_my_Gnome_installation" ]]
+  [[ "$ACT" == "Update_my_Gnome_installation" ]]
  then
    echo "$(date "+%d/%m/%Y-%T") Using current sexyslack blacklist.txt"  >> $LOG
  elif
-  [[ "$(echo "$ACT")" == "Upgrade_to_other_Gnome_version" ]]
+  [[ "$ACT" == "Upgrade_to_other_Gnome_version" ]]
   then
    echo "$(date "+%d/%m/%Y-%T") using old sexyslack blacklist.txt"  >> $LOG
  else
@@ -130,15 +130,15 @@ echo "$BLACK" | xargs -n1 >> /etc/sexyslack/blacklist.txt || exit
 sed -i '/^$/d'  /etc/sexyslack/blacklist.txt
 
 # make a copy of Slackware BLACKLIST for slackpkg
-if [[ "$(echo "$ACT")" == "Install_Gnome_first_time" ]] 
+if [[ "$ACT" == "Install_Gnome_first_time" ]] 
  then
 cat BLACKLIST* >> /etc/slackpkg/blacklist 
  elif
-  [[ "$(echo "$ACT")" == "Upgrade_to_other_Gnome_version" ]]
+  [[ "$ACT" == "Upgrade_to_other_Gnome_version" ]]
   then
 cat BLACKLIST* >> /etc/slackpkg/blacklist
 else
- [[ "$(echo "$ACT")" == "Update_my_Gnome_installation" ]]
+ [[ "$ACT" == "Update_my_Gnome_installation" ]]
  echo "$(date "+%d/%m/%Y-%T") Keep /etc/slackpkg/blacklist as is, just updating things" >> $LOG
 fi 
 # remove doble entries from /etc/slackpkg/blacklist file
@@ -158,9 +158,9 @@ if [  ! $? -eq 0 ]; then
  echo "$(date "+%d/%m/%Y-%T") Cant find BLACKLIST. Please make sure Gnome Version is valid and if exist in 'https://reddoglinux.ddns.net/linux/gnome/' Fast support: 'https://discord.gg/MTPQsJt5aC'" >> $LOG 
  exit 1
 else
-rsync  -avP --delete-after  --exclude-from=/etc/sexyslack/blacklist.txt "$URL""$GNOMVER" ./"$GNOMVER1"
+rsync  -avP  --exclude-from=/etc/sexyslack/blacklist.txt "$URL""$GNOMVER" ./"$GNOMVER1"
 fi
-
+#--delete-after
 # If you want to check sign packages... I really dont know if anyone do this now days...  BUT thats wrong to be honest...
 # the best way to make your Linux > Windows is install packages from everywere...
 cd "$GNOMVER1" || exit
@@ -186,26 +186,53 @@ done
 set -e
 zenity --question --title="INSTALLATION" --text="Proceed to installation?" --no-wrap --ok-label "Yes" --cancel-label "No"
 
-
-if [[ "$(echo "$ACT")"  == "Install_Gnome_first_time" ]] 
+# Using upgradepkg in main folder
+if [[ "$ACT"  == "Install_Gnome_first_time" ]] 
  then
-    /sbin/upgradepkg --reinstall --install-new *.t?z
-   /sbin/upgradepkg --reinstall --install-new */*.t?z 
+ /sbin/upgradepkg --reinstall --install-new *.t?z 
  elif
-  [[ "$(echo "$ACT")" == "Update_my_Gnome_installation" ]]
+ [[ "$ACT" == "Update_my_Gnome_installation" ]]
  then
-   /sbin/upgradepkg --install-new  *.t?z
-   /sbin/upgradepkg --install-new  */*.t?z 
+  /sbin/upgradepkg --install-new  *.t?z 
  elif
-  [[ "$(echo "$ACT")" == "Upgrade_to_other_Gnome_version" ]]
+ [[ "$ACT" == "Upgrade_to_other_Gnome_version" ]]
   then
-   /sbin/upgradepkg --install-new --reinstall *.t?z 
+  /sbin/upgradepkg --install-new --reinstall *.t?z 
+ else
+ exit 1 | zenity --warning --text="INSTALLATION FAILED. Something went wrong. DO NOT REBOOT AND run slackpkg update;slackpkg upgrade-all Fast support: 'https://discord.gg/MTPQsJt5aC'" >> $LOG
+fi
+# check if sub-folder(s) exists in main folder, yes I know its ridiculous this way. 
+eleos="$(find . -maxdepth 1 -type d | cut -c 3-)"
+echo "$eleos" >> /tmp/eleos.txt
+sed -i '/^$/d' /tmp/eleos.txt
+[ -s /tmp/eleos.txt ] 
+echo $?  >> /tmp/ech.txt
+if [[ "$(cat /tmp/ech.txt)" == 0 ]]
+ then
+ [[ "$ACT"  == "Install_Gnome_first_time" ]] 
+   /sbin/upgradepkg --reinstall --install-new */*.t?z 
+elif
+ [[ "$ACT" == "Update_my_Gnome_installation" ]]
+ then
+  /sbin/upgradepkg --install-new  */*.t?z 
+ elif
+ [[ "$ACT" == "Upgrade_to_other_Gnome_version" ]]
+  then
   /sbin/upgradepkg --install-new --reinstall */*.t?z 
  else
  exit 1 | zenity --warning --text="INSTALLATION FAILED. Something went wrong. DO NOT REBOOT AND run slackpkg update;slackpkg upgrade-all Fast support: 'https://discord.gg/MTPQsJt5aC'" >> $LOG
- 
 fi
+
 set +e
+
+if [ -f /tmp/eleos.txt ]; then
+ rm -f /tmp/eleos.txt
+fi
+
+if [ -f /tmp/ech.txt ]; then
+ rm -f /tmp/ech.txt
+fi
+
 # If you installed libvirt or avahi or something else that need to edit rc.local and rc.local.shutdown do it now...before reboot.
 # Since Slackware is not Ubuntu or Fedora do it by your hands... We rape enough Slackware philosophy with all these zenity dialogs and click <OK>. 
 # To be honest, I hope your system break, its the best way to learn how to fix it ;)
