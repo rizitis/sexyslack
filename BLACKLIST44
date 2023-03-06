@@ -5,3 +5,6 @@ gtk4
 upower
 gjs
 libsoup3
+adwaita-icon-theme
+at-spi2-core
+gsettings-desktop-schemas
