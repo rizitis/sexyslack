@@ -94,7 +94,7 @@ elif
  mv BLACKLIST43 BLACKLIST43-BAK ; wget "$LINK2"
 else
  [ "$ACT" =  "Update_my_Gnome_installation" ] && [ "$GNOMVER1" = 44 ]
-  mv BLACKLIST44 BLACKLIST44-BAK ; wget "$LINK2"
+  mv BLACKLIST44 BLACKLIST44-BAK ; wget "$LINK3"
 fi
 
 # create folder sexyslack to /etc for sexyslack blacklist.txt file. Thats only for gnome repo packages blacklist
