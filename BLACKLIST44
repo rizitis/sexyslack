@@ -9,3 +9,4 @@ adwaita-icon-theme
 at-spi2-core
 gsettings-desktop-schemas
 libwnck3
+gnome-keyring
