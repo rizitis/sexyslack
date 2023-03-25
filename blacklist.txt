@@ -1,7 +1,1 @@
-*.md5
-*.lst
-*.meta
-*.gz
-*.txt
-*.rss
-*.bz2
+.
