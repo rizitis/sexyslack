@@ -1,3 +1,6 @@
+# Sexyslack is RIP. slpkg is now supporting everything... 
+## https://gitlab.com/dslackw/slpkg
+
 # sexyslack
 sexyslack is a bash script which working "like" a package manager, but its not.
 
